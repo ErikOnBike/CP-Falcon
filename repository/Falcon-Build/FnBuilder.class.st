@@ -37,6 +37,65 @@ FnBuilder class >> project: aString [
 		yourself
 ]
 
+{ #category : #accessing }
+FnBuilder >> asKebabCase: aString [
+
+	"Answer a kebab-cased version of the specified String.
+	Assume the receiver has either camelCase or PascalCase value (ie no spaces present).
+
+	This method is a copy of the String >> #asKebabCase from CodeParadise.
+
+	For example:
+		'Object' asKebabCase -> 'object'
+		'CodeParadise' asKebabCase -> 'code-paradise'
+		'ReadWriteStream' asKebabCase -> 'read-write-stream'
+		'asString' asKebabCase -> 'as-string'
+		'asKebabCase' asKebabCase -> 'as-kebab-case'
+		'OSProcess' asKebabCase -> 'os-process'
+
+	Implementation:
+	Use two consecutive characters to decide if the 'skewer' should be shown (2 cases).
+	IF first is lowercase AND second is uppercase THEN show: <first>-
+	IF first is uppercase AND second is lowercase THEN show: -<first>
+
+	Reason for this algorithm is that a 'string' of uppercase characters should be
+	regarded as a whole. This avoids results as 'OSProcess' to become 'o-s-process'."
+
+	aString ifEmpty: [ ^ '' ].
+
+	^ String streamContents: [ :stream |
+
+		| charToWrite hasSkewer |
+
+		charToWrite := aString first.
+		hasSkewer := true.	"This prevents that the result starts with a 'skewer'"
+		aString allButFirstDo: [ :each |
+			each isUppercase
+				ifTrue: [
+					charToWrite isUppercase
+						ifTrue: [
+							stream nextPut: charToWrite asLowercase.
+							hasSkewer := false ]
+						ifFalse: [
+							stream
+								nextPut: charToWrite ;
+								nextPut: $-.
+							hasSkewer := true ] ]
+				ifFalse: [
+					charToWrite isUppercase
+						ifTrue: [
+							"Do not write two 'skewers' after each other"
+							hasSkewer
+								ifFalse: [ stream nextPut: $- ].
+							stream nextPut: charToWrite asLowercase ]
+						ifFalse: [ stream nextPut: charToWrite ].
+					hasSkewer := false ].
+			charToWrite := each ].
+
+		"Write last character (unknown if it is upper- or lowercase)"
+		stream nextPut: charToWrite asLowercase ]
+]
+
 { #category : #building }
 FnBuilder >> build [
 
@@ -238,7 +297,7 @@ FnBuilder >> projectClientVersion [
 { #category : #accessing }
 FnBuilder >> projectRepoName [
 
-	^ project asKebabCase
+	^ self asKebabCase: project
 ]
 
 { #category : #accessing }
