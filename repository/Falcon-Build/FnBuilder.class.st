@@ -170,7 +170,12 @@ FnBuilder >> errorCr: aString [
 
 	stderr
 		nextPutAll: aString ;
-		flush
+		flush.
+
+	Transcript
+		show: 'ERROR: ' ;
+		show: aString ;
+		cr
 ]
 
 { #category : #testing }
@@ -528,7 +533,11 @@ FnBuilder >> traceCr: aString [
 
 	stdout
 		nextPutAll: aString ;
-		flush
+		flush.
+
+	Transcript
+		show: aString ;
+		cr
 ]
 
 { #category : #actions }
