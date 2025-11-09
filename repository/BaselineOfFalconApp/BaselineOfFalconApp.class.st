@@ -13,7 +13,8 @@ BaselineOfFalconApp >> baseline: spec [
 
 		"Dependencies"
 		spec
-			baseline: 'CodeParadise' with: [ spec loads: #('default') ; repository: 'github://ErikOnBike/CodeParadise:master' ].
+			baseline: 'CodeParadise' with: [ spec loads: #('default') ; repository: 'github://ErikOnBike/CodeParadise:master' ] ;
+			baseline: 'OSSubprocess' with: [ spec repository: 'github://pharo-contributions/OSSubprocess:master/repository' ].
 
 		"Packages"
 		spec
