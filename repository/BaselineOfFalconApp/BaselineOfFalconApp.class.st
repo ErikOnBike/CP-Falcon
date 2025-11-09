@@ -11,21 +11,17 @@ BaselineOfFalconApp >> baseline: spec [
 
 	spec for: #common do: [
 
-		"Dependencies"
-		spec
-			baseline: 'CodeParadise' with: [ spec loads: #('default') ; repository: 'github://ErikOnBike/CodeParadise:master' ] ;
-			baseline: 'OSSubprocess' with: [ spec repository: 'github://pharo-contributions/OSSubprocess:master/repository' ].
-
 		"Packages"
 		spec
 			package: 'Falcon-App' with: [ spec requires: #('Falcon-Data') ] ;
 			package: 'Falcon-Data' with: [ spec requires: #('Falcon-Model') ] ;
-			package: 'Falcon-Model' with: [ spec requires: #('CodeParadise') ] ;
-			package: 'Falcon-Build' with: [ spec requires: #('CodeParadise') ].
+			package: 'Falcon-Model' with: [ spec loads: #('default') ; repository: 'github://ErikOnBike/CodeParadise:master' ] ;
+			package: 'Falcon-Build' with: [ spec repository: 'github://pharo-contributions/OSSubprocess:master/repository' ].
 
 		"Groups"
 		spec 
-			group: 'default' with: #( 'Core' );
+			group: 'default' with: #( 'Core' ) ;
+			group: 'builder' with: #( 'Falcon-Build' ) ;
 
 			group: 'Core' with: #( 'Falcon-App' ) ]
 ]
