@@ -24,7 +24,7 @@ FnBuilder class >> buildProject: aString [
 { #category : #'instance creation' }
 FnBuilder class >> new [
 
-	self errorNewReplacedBy: #project:
+	self error: 'Use ', #project:
 ]
 
 { #category : #'instance creation' }
@@ -248,7 +248,8 @@ FnBuilder >> projectServerApplicationClass [
 
 	applicationClasses := OrderedCollection new.
 
-	CynRestHttpServerApplication allSubclasses do: [ :each |
+	"Because class is not known at startup, use dynamic reference"
+	(Smalltalk classNamed: #CynRestHttpServerApplication) allSubclassesDo: [ :each |
 		each hasAbstractTag
 			ifFalse: [ applicationClasses add: each ] ].
 
@@ -290,7 +291,8 @@ FnBuilder >> projectWebApplicationClass [
 
 	applicationClasses := OrderedCollection new.
 
-	CynMobileWebApplication allSubclasses do: [ :each |
+	"Because class is not known at startup, use dynamic reference"
+	(Smalltalk classNamed: #CynMobileWebApplication) allSubclassesDo: [ :each |
 		each hasAbstractTag
 			ifFalse: [ applicationClasses add: each ] ].
 
@@ -420,7 +422,9 @@ FnBuilder >> setProcess: aProcess [
 FnBuilder >> setup [
 
 	self traceCr: 'Setting environment to production'.
-	CpServerEnvironment beProduction
+
+	"Because class is not known at startup, use dynamic reference"
+	(Smalltalk classNamed: #CpServerEnvironment) beProduction
 ]
 
 { #category : #actions }
@@ -433,7 +437,9 @@ FnBuilder >> startApplication [
 	webApplicationClass register.
 
 	self traceCr: 'Start application server'.
-	applicationServer := CpApplicationServerStarter
+
+	"Because class is not known at startup, use dynamic reference"
+	applicationServer := (Smalltalk classNamed: #CpApplicationServerStarter)
 		startUsingConfig: {
 			#portNumber -> 9999.
 			#staticFilesDirectoryName -> 'repos/cp-client-environment/html'.
