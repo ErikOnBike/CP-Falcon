@@ -101,9 +101,9 @@ FnBuilder >> build [
 
 	[
 		self
+			loadProjects ;
 			validate ;
 			setup ;
-			loadProjects ;
 			startApplication ;
 			createClientImage ;
 			createServerImage ;
@@ -119,7 +119,7 @@ FnBuilder >> build [
 			quit ]
 ]
 
-{ #category : #accessing }
+{ #category : #actions }
 FnBuilder >> clearProcess [
 
 	runningProcess := nil
@@ -139,38 +139,30 @@ FnBuilder >> clientImageName [
 			nextPutAll: '.image' ]
 ]
 
-{ #category : #accessing }
-FnBuilder >> createCientImageProcess [
-
-	^ FnProcess
-		name: 'CreateClientImage'
-		command: 'create-client-image.sh'
-		arguments: { self projectRepoName . self projectClientVersion . self projectShortName }
-]
-
 { #category : #actions }
 FnBuilder >> createClientImage [
 
+	self traceCr: 'Create client image'.
+
 	self
-		performProcess: self createCientImageProcess
+		performProcess: (FnProcess
+			name: 'CreateClientImage'
+			command: 'create-client-image.sh'
+			arguments: { self projectRepoName . self projectClientVersion . self projectShortName })
 		timeout: 5 minutes
 ]
 
 { #category : #actions }
 FnBuilder >> createServerImage [
 
+	self traceCr: 'Create server image'.
+
 	self
-		performProcess: self createServerImageProcess
+		performProcess: (FnProcess
+			name: 'CreateServerImage'
+			command: 'create-server-image.sh'
+			arguments: { self projectRepoName . self projectServerVersion . self projectShortName })
 		timeout: 5 minutes
-]
-
-{ #category : #accessing }
-FnBuilder >> createServerImageProcess [
-
-	^ FnProcess
-		name: 'CreateServerImage'
-		command: 'create-server-image.sh'
-		arguments: { self projectRepoName . self projectServerVersion . self projectShortName }
 ]
 
 { #category : #'input/output' }
@@ -361,10 +353,14 @@ FnBuilder >> projectWebApplicationClass [
 	^ applicationClasses first
 ]
 
-{ #category : #building }
+{ #category : #actions }
 FnBuilder >> quit [
 
-	"Smalltalk quitPrimitive"
+	self
+		terminateProcess ;
+		stopApplicationServer.
+
+	"Smalltalk snapshot: false andQuit: true"
 ]
 
 { #category : #actions }
@@ -509,7 +505,16 @@ FnBuilder >> startApplication [
 	webApplicationClass addWebResourcesDelegateTo: applicationServer server
 ]
 
-{ #category : #accessing }
+{ #category : #actions }
+FnBuilder >> stopApplicationServer [
+
+	applicationServer ifNil: [ ^ self ].
+
+	applicationServer stop.
+	applicationServer := nil
+]
+
+{ #category : #actions }
 FnBuilder >> terminateProcess [
 
 	runningProcess ifNil: [ ^ self ].
