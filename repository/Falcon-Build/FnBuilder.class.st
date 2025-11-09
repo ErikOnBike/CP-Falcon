@@ -271,7 +271,7 @@ FnBuilder >> projectAppClass [
 { #category : #accessing }
 FnBuilder >> projectAppName [
 
-	^ self projectAppClass app
+	^ self projectWebApplicationClass app
 ]
 
 { #category : #accessing }
