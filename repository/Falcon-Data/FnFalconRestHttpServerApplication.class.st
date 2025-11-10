@@ -18,3 +18,11 @@ FnFalconRestHttpServerApplication class >> app [
 
 	^ #'falcon-data'
 ]
+
+{ #category : #actions }
+FnFalconRestHttpServerApplication >> load [
+
+	super load.
+
+	self installClass: FnFalconRestApiService
+]
