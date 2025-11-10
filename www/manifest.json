@@ -1,0 +1,11 @@
+{
+	"name": "Falcon",
+	"short_name": "Falcon",
+	"display": "fullscreen",
+	"background_color": "#000",
+	"theme_color": "#dd9561",
+	"description": "Control Mobile Apps",
+	"start_url": "./index.html",
+	"id": "/index.html",
+	"orientation": "portrait"
+}
