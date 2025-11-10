@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="manifest" href="manifest.json">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="format-detection" content="telephone=no">
+<!--
+	<link rel="apple-touch-icon-precomposed" href="./img/logo-152.png">
+	<link rel="apple-touch-icon-precomposed" href="./img/logo-144.png" sizes="144x144">
+	<link rel="apple-touch-icon-precomposed" href="./img/logo-120.png" sizes="120x120">
+	<link rel="icon" href="./img/logo-144.png" sizes="144x144">
+	<link rel="icon" href="./img/logo-120.png" sizes="120x120">
+	<link rel="icon" href="./img/logo-64.png" sizes="64x64">
+	<link rel="shortcut icon" href="./img/logo-196.png" sizes="196x196">
+	<meta name="msapplication-TileColor" content="#FFFFFF">
+	<meta name="msapplication-TileImage" content="./img/logo-144.png">
+-->
+	<meta name="description" content="Falcon">
+	<meta name="author" content="Erik Stel">
+	<meta name="keywords" content="Falcon">
+	<meta property="og:type" content="app">
+<!--
+	<meta property="og:image" content="./img/logo.png">
+-->
+	<title>Falcon</title>
+	<style id="loader-style">
+		body {
+			position: fixed !important;
+			display: block !important;
+			box-sizing: border-box !important;
+			margin: 0 !important;
+			padding: 0 !important;
+			width: 100% !important;
+			max-width: 100% !important;
+			height: 100% !important;
+			max-height: 100% !important;
+			overflow: hidden !important;
+		}
+		#loader-block {
+			position: relative;
+			display: none;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			width: 80%;
+			max-width: 40em;
+			height: 8rem;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+		#loader-block:first-child:last-child {
+			display: flex;
+		}
+		#loader-block label {
+			display: block;
+			font-size: 32px;
+			margin-bottom: 1rem;
+		}
+		#loader-progress {
+			position: relative;
+			display: block;
+			width: 100%;
+			height: 20px;
+			border-radius: 10px;
+			border: 1px solid #333;
+			background-color: rgba(0, 0, 0, .1);
+			overflow: hidden;
+		}
+		#loader-progress-bar {
+			position: absolute;
+			height: 100%;
+			width: 50%;
+			border: none;
+			border-radius: 10px;
+			background-color: rgba(0, 0, 0, .4);
+		}
+		#loader-block:first-child:last-child #loader-progress-bar {
+			animation-duration: 2s;
+			animation-iteration-count: infinite;
+			animation-name: loader-progress-bar;
+		}
+		@keyframes loader-progress-bar {
+			from {
+				left: -50%;
+			}
+			to {
+				left: 100%;
+			}
+		}
+	</style>
+	<script type="module" src="./app.js"></script>
+	<script>
+		let searchParams = new URL(document.URL).searchParams;
+
+		// Set environment version (monotonic increasing counter, expecting exact match on server)
+		globalThis.sessionStorage.setItem("CLIENT_VERSION", "9");
+
+		// Set application identifier
+		globalThis.sessionStorage.setItem("APP", "falcon");
+
+		// Set environment
+		let env = searchParams.get("env");
+		if(env) {
+			globalThis.sessionStorage.setItem("CODE_PARADISE_ENV", env);
+		}
+		if([ "localhost", "paradise" ].includes(document.location.hostname)) {
+			globalThis.sessionStorage.setItem("CANYON_ENV", "dev");
+		}
+
+		// Set server location
+		globalThis.sessionStorage.setItem("SERVER_URL", document.location.protocol.replace("http", "ws") + "//" + document.location.host + "/io");
+
+		// Set OS/platform identifier
+		let platform = window.navigator.platform || "";
+		let appVersion = window.navigator.appVersion || "";
+		globalThis.sessionStorage.setItem("OS",
+			platform.indexOf("Mac") >= 0 ? "macos" :
+			platform.indexOf("Win") >= 0 ? "windows" :
+			platform.indexOf("Linux") >= 0 ? "linux" :
+			appVersion.indexOf("Mac") >= 0 ? "macos" :
+			appVersion.indexOf("Win") >= 0 ? "windows" :
+			appVersion.indexOf("Linux") >= 0 ? "linux" :
+			"unknown");
+
+		// Set Ionic config mode
+		window.Ionic = {
+			config: {
+				backButtonText: ''
+			}
+		};
+		let mode = searchParams.get("mode");
+		if(mode) {
+			window.Ionic.config.mode = mode;
+		}
+
+		// Load and start image if this page and its scripts are loaded
+		window.addEventListener("load", function() {
+			globalThis.Squeak.fetchImageAndRun("./app.image");
+		});
+	</script>
+</head>
+<body><div id="loader-block"><label>Loading...</label><div id="loader-progress"><div id="loader-progress-bar"></div></div></div></body>
+</html>
