@@ -43,6 +43,14 @@ FnRepositoriesPage class >> template [
 ]
 
 { #category : #'event handling' }
+FnRepositoriesPage >> handleRefreshAction [
+
+	self app loadDataRepositories.
+
+	self updateView
+]
+
+{ #category : #'event handling' }
 FnRepositoriesPage >> handleRepositorySync: aRepository [
 
 	self repositoryList closeSlidingItems.
