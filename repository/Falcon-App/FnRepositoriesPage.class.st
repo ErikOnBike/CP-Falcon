@@ -29,14 +29,10 @@ FnRepositoriesPage class >> template [
 	</ion-refresher>
 	<ion-list id="repository-list">
 		<template>
-			<ion-item-sliding>
-				<ion-item button="true" detail="true">
-					<span>{{name}}</span>
-				</ion-item>
-				<ion-item-options slot="end">
-					<ion-item-option expandable="" event-click="{{doSync}}" event-ion-swipe="{{doSync}}">Sync</ion-item>
-				</ion-item-options>
-			</ion-item-sliding>
+			<ion-item button="true" detail="true" event-click="{{click}}">
+				<span>{{name}}</span>
+				<ion-note slot="end">{{syncedAt}}</ion-note>
+			</ion-item>
 		</template>
 	</ion-list>
 </ion-content>'
@@ -51,11 +47,15 @@ FnRepositoriesPage >> handleRefreshAction [
 ]
 
 { #category : #'event handling' }
-FnRepositoriesPage >> handleRepositorySync: aRepository [
+FnRepositoriesPage >> handleRepositoryClicked: aRepository [
 
-	self repositoryList closeSlidingItems.
+	| page |
 
-	self traceCr: 'Sync repo ', aRepository printString
+	page := self app
+		showPage: FnRepositoryPage
+		withModel: aRepository.
+
+	page when: CynPageClosed deferSend: #handleRefreshAction to: self
 ]
 
 { #category : #'event handling' }
@@ -87,8 +87,6 @@ FnRepositoriesPage >> updateBeforeNavigate [
 
 	super updateBeforeNavigate.
 
-	self repositoryList closeSlidingItems.
-
 	self updateView
 ]
 
@@ -107,7 +105,7 @@ FnRepositoriesPage >> updateRepositories [
 		with: (self app repositories)
 		accessor: [ :repository | CynDomUpdaterPropertyModel on: repository
 			overrides: {
-				self when: #doSync deferSend: #handleRepositorySync: with: repository } ]
+				self when: #click deferSend: #handleRepositoryClicked: with: repository } ]
 ]
 
 { #category : #view }
