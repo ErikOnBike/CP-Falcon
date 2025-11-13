@@ -168,7 +168,6 @@ FalconApp >> loadDataRepositories [
 	[
 		repositories ifNil: [ repositories := OrderedCollection new ].
 		self dataMerge: (FnRepository restRead asOrderedCollection) into: repositories
-.self traceCr: repositories printString.
 	] on: Error do: [ :err | self warnCr: 'Unable to read repositories: ', err printString ]
 ]
 
