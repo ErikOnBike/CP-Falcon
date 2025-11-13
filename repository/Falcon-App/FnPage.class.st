@@ -21,6 +21,14 @@ FnPage >> isMainPage [
 ]
 
 { #category : #'view - customization' }
+FnPage >> title [
+
+	"Use title from page"
+
+	^ nil
+]
+
+{ #category : #'view - customization' }
 FnPage >> toolbarStartButtons [
 
 	"Answer the toolbar buttons for the receiver.
