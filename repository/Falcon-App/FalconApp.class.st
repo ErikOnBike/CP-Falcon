@@ -26,13 +26,13 @@ FalconApp class >> beLoaded [
 ]
 
 { #category : #'accessing - text' }
-FalconApp class >> constraintTexts [
+FalconApp class >> fnConstraintTexts [
 
 	"Answer Dictionary with constraint texts"
 
-	<languageResource>
+	<languageResource: #en>
 
-	^ super constraintTexts
+	^ Dictionary new
 		at: #'constraint.user' put: 'Unsupported user' ;
 		yourself
 ]
