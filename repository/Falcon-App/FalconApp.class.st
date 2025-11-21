@@ -219,29 +219,6 @@ FalconApp >> loadMenu [
 ]
 
 { #category : #actions }
-FalconApp >> makeTopPage: aPage [
-
-	"Make the specified page the top page"
-
-	| actions |
-
-	"Skip if already top page"
-	aPage nextSibling
-		ifNil: [ ^ self ].
-
-	"Remove page from navigation stack (remember Ionic is 0-based for indexing)"
-	actions := Array new: 2.
-	actions at: 1 put: (navigation removeIndex: aPage indexInParent - 1 removeCount: 1 opts: { #animated -> false } asDictionary).
-
-	"Add page on top"
-	actions at: 2 put: (navigation push: aPage).
-
-	aPage updateBeforeNavigate.
-	(CpJavaScriptPromise allSettled: actions) await.
-	aPage updateAfterNavigate
-]
-
-{ #category : #actions }
 FalconApp >> performUpdateVersion [
 
 	self
