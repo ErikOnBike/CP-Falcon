@@ -30,11 +30,11 @@ dir consoleLog.
 ]
 
 { #category : #API }
-FnFalconRestApiService >> getRepositories: aRestRequest response: aServerResponse [
+FnFalconRestApiService >> getRepositories: aRestRequest response: aRestResponse [
 
 	<get: '/api/repositories'>
 
-	self send: self allRepositories response: aServerResponse
+	self send: self allRepositories response: aRestResponse
 ]
 
 { #category : #'API - repositories' }
@@ -63,7 +63,7 @@ FnFalconRestApiService >> lastUpdatedDirent: aDirent [
 ]
 
 { #category : #API }
-FnFalconRestApiService >> logRepository: aRestRequest response: aServerResponse [
+FnFalconRestApiService >> logRepository: aRestRequest response: aRestResponse [
 
 	<patch: '/api/repositories/:id/log'>
 
@@ -71,11 +71,11 @@ FnFalconRestApiService >> logRepository: aRestRequest response: aServerResponse 
 
 	id := aRestRequest pathParameterAt: #id.
 
-	self logRepositoryWithId: id response: aServerResponse
+	self logRepositoryWithId: id response: aRestResponse
 ]
 
 { #category : #'API - repositories' }
-FnFalconRestApiService >> logRepositoryWithId: aString response: aServerResponse [
+FnFalconRestApiService >> logRepositoryWithId: aString response: aRestResponse [
 
 	| process |
 
@@ -90,11 +90,11 @@ FnFalconRestApiService >> logRepositoryWithId: aString response: aServerResponse
 						#error -> (error ifNotNil: [ error printString ]).
 						#success -> stdout asString.
 						#log -> stderr asString } asDictionary
-				response: aServerResponse ]
+				response: aRestResponse ]
 ]
 
 { #category : #API }
-FnFalconRestApiService >> pullRepository: aRestRequest response: aServerResponse [
+FnFalconRestApiService >> pullRepository: aRestRequest response: aRestResponse [
 
 	<patch: '/api/repositories/:id/pull'>
 
@@ -102,11 +102,11 @@ FnFalconRestApiService >> pullRepository: aRestRequest response: aServerResponse
 
 	id := aRestRequest pathParameterAt: #id.
 
-	self pullRepositoryWithId: id response: aServerResponse
+	self pullRepositoryWithId: id response: aRestResponse
 ]
 
 { #category : #'API - repositories' }
-FnFalconRestApiService >> pullRepositoryWithId: aString response: aServerResponse [
+FnFalconRestApiService >> pullRepositoryWithId: aString response: aRestResponse [
 
 	| process |
 
@@ -121,5 +121,5 @@ FnFalconRestApiService >> pullRepositoryWithId: aString response: aServerRespons
 						#error -> (error ifNotNil: [ error printString ]).
 						#success -> stdout asString.
 						#log -> stderr asString } asDictionary
-				response: aServerResponse ]
+				response: aRestResponse ]
 ]
