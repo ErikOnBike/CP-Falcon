@@ -10,3 +10,5 @@ server/server.image
 
 update-vm.sh
 update-image.sh
+
+deploy-keys.txt
