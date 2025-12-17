@@ -90,7 +90,9 @@ FnRepositoryPage >> handleLogButtonClicked [
 { #category : #'event handling' }
 FnRepositoryPage >> handlePullButtonClicked [
 
-	self updateLog: model doPull
+	self updateLog: model doPull.
+
+	self updateModel
 ]
 
 { #category : #initialization }
@@ -149,4 +151,10 @@ FnRepositoryPage >> updateLog: aDictionary [
 						lf ] ] ].
 
 	self logElement textContent: log
+]
+
+{ #category : #'as yet unclassified' }
+FnRepositoryPage >> updateModel [
+
+	[ model restRead ] on: Error do: [ :error | self handleError: error ]
 ]

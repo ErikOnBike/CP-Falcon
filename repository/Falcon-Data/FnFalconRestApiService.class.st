@@ -17,7 +17,7 @@ FnFalconRestApiService >> allRepositories [
 	| dir repositories |
 
 	dir := CpNodeJSFS namespace openDirSync: (config at: #'repositories-location') options: { #recursive -> false } asDictionary.
-dir consoleLog.
+
 	repositories := OrderedCollection new.
 
 	dir directoriesDo: [ :each |
@@ -35,6 +35,36 @@ FnFalconRestApiService >> getRepositories: aRestRequest response: aRestResponse 
 	<get: '/api/repositories'>
 
 	self send: self allRepositories response: aRestResponse
+]
+
+{ #category : #API }
+FnFalconRestApiService >> getRepository: aRestRequest response: aRestResponse [
+
+	<get: '/api/repositories/:id'>
+
+	| id |
+
+	id := aRestRequest pathParameterAt: #id.
+
+	self send: (self getRepositoryWithId: id) response: aRestResponse
+]
+
+{ #category : #'API - repositories' }
+FnFalconRestApiService >> getRepositoryWithId: id [
+
+	| dir |
+
+	dir := CpNodeJSFS namespace openDirSync: (config at: #'repositories-location') options: { #recursive -> false } asDictionary.
+
+	dir directoriesDo: [ :each |
+		each name = id
+			ifTrue: [
+				^ {
+					#id -> each name.
+					#name -> each name.
+					#syncedAt -> (self lastUpdatedDirent: each) } asDictionary ] ].
+
+	CpNodeJSRestNotFoundError signal
 ]
 
 { #category : #'API - repositories' }
