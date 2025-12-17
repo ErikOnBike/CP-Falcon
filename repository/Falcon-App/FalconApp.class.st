@@ -140,11 +140,11 @@ FalconApp >> initialize [
 { #category : #initialization }
 FalconApp >> loadApp [
 
-	super loadApp.
-
 	"Make the app (all pages) thin"
 	CpHtmlElement documentBody
-		addClass: #thin
+		addClass: #thin.
+
+	super loadApp
 ]
 
 { #category : #actions }
