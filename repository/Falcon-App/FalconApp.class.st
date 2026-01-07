@@ -37,6 +37,21 @@ FalconApp class >> fnConstraintTexts [
 		yourself
 ]
 
+{ #category : #'accessing - text' }
+FalconApp class >> fnViewTexts [
+
+	"Answer view texts"
+
+	<languageResource: #en>
+
+	^ Dictionary new
+		at: #'app.label.account.email' put: 'E-mail' ;
+		at: #'app.label.account.password' put: 'Wachtwoord' ;
+		at: #'app.label.repository.name' put: 'Name' ;
+		at: #'app.label.repository.syncedAt' put: 'Last synced' ;
+		yourself
+]
+
 { #category : #'web resources' }
 FalconApp class >> globalStyle [
 
