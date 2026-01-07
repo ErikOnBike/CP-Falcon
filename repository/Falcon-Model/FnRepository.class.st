@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'#name => CynPropertySlot',
 		'#location => CynPropertySlot',
-		'#syncedAt => CynPropertySlot'
+		'#syncedAt => CynPropertySlot',
+		'#isMobileApp => CynPropertySlot'
 	],
 	#category : #'Falcon-Model-Core'
 }
@@ -14,7 +15,7 @@ FnRepository class >> allPropertyNames [
 
 	"Generated code. DO NOT EDIT"
 
-	^ #(id name location syncedAt)
+	^ #(id name location syncedAt isMobileApp)
 ]
 
 { #category : #'accessing - generated' }
@@ -22,7 +23,13 @@ FnRepository class >> readWriteProperties [
 
 	"Generated code. DO NOT EDIT"
 
-	^ #(id name location syncedAt)
+	^ #(id name location syncedAt isMobileApp)
+]
+
+{ #category : #accessing }
+FnRepository >> isMobileApp [
+
+	^ isMobileApp
 ]
 
 { #category : #accessing }

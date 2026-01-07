@@ -1,6 +1,9 @@
 Class {
 	#name : #FnFalconRestApiService,
 	#superclass : #CynLocalAccountRestApiService,
+	#instVars : [
+		'fs'
+	],
 	#category : #'Falcon-Data-Service'
 }
 
@@ -16,7 +19,7 @@ FnFalconRestApiService >> allRepositories [
 
 	| dir repositories |
 
-	dir := CpNodeJSFS namespace openDirSync: (config at: #'repositories-location') options: { #recursive -> false } asDictionary.
+	dir := fs openDirSync: (config at: #'repositories-location') options: { #recursive -> false } asDictionary.
 
 	repositories := OrderedCollection new.
 
@@ -24,7 +27,8 @@ FnFalconRestApiService >> allRepositories [
 		repositories add: {
 			#id -> each name.
 			#name -> each name.
-			#syncedAt -> (self lastUpdatedDirent: each) } asDictionary ].
+			#syncedAt -> (self lastUpdatedDirent: each).
+			#isMobileApp -> (self isMobileAppDirent: each) } asDictionary ].
 
 	^ repositories asArray
 ]
@@ -54,7 +58,7 @@ FnFalconRestApiService >> getRepositoryWithId: id [
 
 	| dir |
 
-	dir := CpNodeJSFS namespace openDirSync: (config at: #'repositories-location') options: { #recursive -> false } asDictionary.
+	dir := fs openDirSync: (config at: #'repositories-location') options: { #recursive -> false } asDictionary.
 
 	dir directoriesDo: [ :each |
 		each name = id
@@ -62,7 +66,8 @@ FnFalconRestApiService >> getRepositoryWithId: id [
 				^ {
 					#id -> each name.
 					#name -> each name.
-					#syncedAt -> (self lastUpdatedDirent: each) } asDictionary ] ].
+					#syncedAt -> (self lastUpdatedDirent: each).
+					#isMobileApp -> (self isMobileAppDirent: each) } asDictionary ] ].
 
 	CpNodeJSRestNotFoundError signal
 ]
@@ -73,6 +78,30 @@ FnFalconRestApiService >> gitCommand [
 	"Answer the git command (with additional space to allow arguments to be appended directly)"
 
 	^ (config at: #'git-location'), '/git '
+]
+
+{ #category : #initialization }
+FnFalconRestApiService >> initialize [
+
+	super initialize.
+
+	fs := CpNodeJSFS namespace
+]
+
+{ #category : #'API - repositories' }
+FnFalconRestApiService >> isMobileAppDirent: aDirent [
+
+	| pathPrefix |
+
+	pathPrefix := String streamContents: [ :stream |
+		stream
+			nextPutAll: aDirent parentPath ;
+			nextPut: $/ ;
+			nextPutAll: aDirent name ;
+			nextPut: $/ ].
+self traceCr: 'Checking dirs at: ', pathPrefix.
+self traceCr: 'IsMobile? ', ((fs isDirectory: pathPrefix, 'server') and: [ fs isDirectory: pathPrefix, 'www' ]) printString.
+	^ (fs isDirectory: pathPrefix, 'server') and: [ fs isDirectory: pathPrefix, 'www' ]
 ]
 
 { #category : #'API - repositories' }
@@ -87,7 +116,7 @@ FnFalconRestApiService >> lastUpdatedDirent: aDirent [
 			nextPutAll: aDirent name ;
 			nextPutAll: '/.git' ].
 
-	stats := CpNodeJSFS namespace statSync: gitDir options: { #bigint -> false } asDictionary.
+	stats := fs statSync: gitDir options: { #bigint -> false } asDictionary.
 
 	^ stats mtime dateAndTimeString
 ]
