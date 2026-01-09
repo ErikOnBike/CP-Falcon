@@ -17,13 +17,11 @@ FnFalconRestApiService class >> beLoaded [
 { #category : #'API - repositories' }
 FnFalconRestApiService >> allRepositories [
 
-	| dir repositories |
-
-	dir := fs openDirSync: (config at: #'repositories-location') options: { #recursive -> false } asDictionary.
+	| repositories |
 
 	repositories := OrderedCollection new.
 
-	dir directoriesDo: [ :each |
+	self withDirectoriesIn: (config at: #'repositories-location') do: [ :each |
 		repositories add: {
 			#id -> each name.
 			#name -> each name.
@@ -56,11 +54,7 @@ FnFalconRestApiService >> getRepository: aRestRequest response: aRestResponse [
 { #category : #'API - repositories' }
 FnFalconRestApiService >> getRepositoryWithId: id [
 
-	| dir |
-
-	dir := fs openDirSync: (config at: #'repositories-location') options: { #recursive -> false } asDictionary.
-
-	dir directoriesDo: [ :each |
+	self withDirectoriesIn: (config at: #'repositories-location') do: [ :each |
 		each name = id
 			ifTrue: [
 				^ {
@@ -180,4 +174,14 @@ FnFalconRestApiService >> pullRepositoryWithId: aString response: aRestResponse 
 						#success -> stdout asString.
 						#log -> stderr asString } asDictionary
 				response: aRestResponse ]
+]
+
+{ #category : #'API - support' }
+FnFalconRestApiService >> withDirectoriesIn: aString do: aBlock [
+
+	| dir |
+
+	dir := fs openDirSync: aString options: { #recursive -> false }.
+
+	[ dir directoriesDo: aBlock ] ensure: [ dir close ]
 ]
