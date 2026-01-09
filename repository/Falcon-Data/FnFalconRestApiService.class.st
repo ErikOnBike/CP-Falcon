@@ -99,8 +99,7 @@ FnFalconRestApiService >> isMobileAppDirent: aDirent [
 			nextPut: $/ ;
 			nextPutAll: aDirent name ;
 			nextPut: $/ ].
-self traceCr: 'Checking dirs at: ', pathPrefix.
-self traceCr: 'IsMobile? ', ((fs isDirectory: pathPrefix, 'server') and: [ fs isDirectory: pathPrefix, 'www' ]) printString.
+
 	^ (fs isDirectory: pathPrefix, 'server') and: [ fs isDirectory: pathPrefix, 'www' ]
 ]
 
