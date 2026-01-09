@@ -135,6 +135,26 @@ FalconApp >> handleSelectMenuItem: aClickEvent [
 		self navigateTo: pageClass ]
 ]
 
+{ #category : #'event handling' }
+FalconApp >> handleSessionExpired [
+
+	"When session expired, go to login page.
+	Exception is when we're still in initialization phase,
+	since then a check is already made for login."
+
+	super handleSessionExpired.
+
+	"We're still initializing if the repositories are not created yet"
+	repositories ifNil: [ ^ self ].
+
+	"Perform the login deferred, since Announcements are made synchronous and the
+	session expires announcement also resets the logged in status of the account"
+	CpGlobalThis defer: [
+		self showAlertTitle: 'Session expired' message: 'Log in again to continu.'.
+
+		self showLogin ]
+]
+
 { #category : #accessing }
 FalconApp >> homePageClass [
 
