@@ -13,12 +13,6 @@ FnFalconRestHttpServerApplication class >> allowedPackages [
 		FnRepository package }
 ]
 
-{ #category : #accessing }
-FnFalconRestHttpServerApplication class >> app [
-
-	^ #'falcon-data'
-]
-
 { #category : #actions }
 FnFalconRestHttpServerApplication >> load [
 
