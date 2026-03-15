@@ -172,16 +172,6 @@ FalconApp >> initialize [
 	self loadData
 ]
 
-{ #category : #initialization }
-FalconApp >> loadApp [
-
-	"Make the app (all pages) thin"
-	CpHtmlElement documentBody
-		addClass: #thin.
-
-	super loadApp
-]
-
 { #category : #actions }
 FalconApp >> loadData [
 
