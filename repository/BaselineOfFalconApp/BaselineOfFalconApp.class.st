@@ -15,10 +15,10 @@ BaselineOfFalconApp >> baseline: spec [
 		spec
 			package: 'Falcon-App' with: [ spec requires: #('Falcon-Data') ] ;
 			package: 'Falcon-Data' with: [ spec requires: #('Falcon-Model') ] ;
-			package: 'Falcon-Model' with: [ spec requires: #('CodeParadise') ] ;
+			package: 'Falcon-Model' with: [ spec requires: #('CpCanyon') ] ;
 			package: 'Falcon-Build' with: [ spec requires: #('OSSubprocess') ].
 
-		spec baseline: 'CodeParadise' with: [ spec repository: 'github://ErikOnBike/CodeParadise:master' ].
+		spec baseline: 'CpCanyon' with: [ spec repository: 'github://ErikOnBike/CP-Canyon:main' ].
 
 		spec baseline: 'OSSubprocess' with: [ spec repository: 'github://pharo-contributions/OSSubprocess:master/repository' ].
 
